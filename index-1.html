@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منظومة مركز شباب طنط الجزيرة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F1F5EE;--card:#fff;--ink:#16221C;--mute:#5E6F66;--line:#CBD7CE;--pitch:#0F3D2E;--sig:#F2C230;--bad:#B3261E;--ok:#1E7B4B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1612;--card:#16221C;--ink:#E8EFE9;--mute:#9DB0A5;--line:#2A3B32;--pitch:#1B5E46;--bad:#FF8A80;--ok:#6FD39B}}
+:root[data-theme="dark"]{--bg:#0D1612;--card:#16221C;--ink:#E8EFE9;--mute:#9DB0A5;--line:#2A3B32;--pitch:#1B5E46;--bad:#FF8A80;--ok:#6FD39B}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Cairo,Tahoma,sans-serif;line-height:1.6}
+header{background:var(--pitch);color:#fff;padding:18px 16px 14px;border-bottom:4px solid var(--sig)}
+header h1{margin:0;font-size:22px;font-weight:800}header p{margin:0;font-size:13px;opacity:.8}
+main{max-width:820px;margin:0 auto;padding:14px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.st b{display:block;font-size:24px;font-weight:800}.st span{font-size:12px;color:var(--mute)}
+nav{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+nav button{flex:1;white-space:nowrap;font:inherit;font-weight:600;padding:9px 12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;cursor:pointer}
+nav button.on{background:var(--pitch);color:#fff;border-color:var(--pitch)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sig);outline-offset:1px}
+section{display:none}section.on{display:block}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:12px}
+.box h2{margin:0 0 8px;font-size:16px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+label{font-size:12px;color:var(--mute);display:block}
+input,select{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.go{margin-top:10px;font:inherit;font-weight:800;padding:9px 18px;border:0;border-radius:6px;background:var(--sig);color:#16221C;cursor:pointer}
+.sm{font:inherit;font-size:12px;padding:4px 10px;border:1px solid var(--pitch);background:none;color:var(--ink);border-radius:5px;cursor:pointer}
+.it{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--line)}
+.it:first-of-type{border-top:0}.it small{color:var(--mute);display:block}
+.tag{font-size:12px;font-weight:600;padding:2px 8px;border-radius:10px;border:1px solid currentColor}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:#B07A00}
+.msg{min-height:22px;font-size:13px;font-weight:600;margin-top:6px}
+.empty{color:var(--mute);font-size:14px;padding:8px 0}
+</style>
+</head>
+<body>
+<header style="display:flex;justify-content:space-between;align-items:center"><div><h1>مركز شباب طنط الجزيرة</h1><p>المرحلة الأولى</p></div><button class="sm" id="out" style="display:none;color:#fff;border-color:#fff">خروج</button></header>
+<div id="login" style="display:none;position:fixed;inset:0;z-index:9;background:var(--bg);padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px))"><div class="box" style="max-width:360px;margin:8vh auto"><h2>تسجيل دخول الموظفين</h2><label for="le">البريد الإلكتروني</label><input id="le" type="email" autocomplete="username"><label for="lp" style="margin-top:8px">كلمة المرور</label><input id="lp" type="password" autocomplete="current-password"><button class="go" id="lg">دخول</button><div class="msg" id="lm"></div></div></div>
+<div id="sync" class="empty" style="padding:6px 16px;font-size:12px;text-align:center"></div>
+<main>
+<div class="stats" id="stats"></div>
+<nav id="nav">
+<button data-t="m" class="on">الأعضاء والاشتراكات</button>
+<button data-t="b">حجز الملاعب</button>
+<button data-t="p">التحصيل</button>
+</nav>
+
+<section id="m" class="on">
+<div class="box"><h2>إضافة عضو</h2>
+<div class="row">
+<div><label for="mn">الاسم</label><input id="mn"></div>
+<div><label for="mp">الموبايل</label><input id="mp" inputmode="tel"></div>
+<div><label for="mpl">الاشتراك</label><select id="mpl"></select></div>
+</div>
+<button class="go" id="addm">حفظ وتحصيل الاشتراك</button><div class="msg" id="mm"></div></div>
+<div class="box"><h2>الأعضاء</h2><div id="ml"></div></div>
+</section>
+
+<section id="b">
+<div class="box"><h2>حجز جديد</h2>
+<div class="row">
+<div><label for="bf">الملعب</label><select id="bf"></select></div>
+<div><label for="bd">التاريخ</label><input type="date" id="bd"></div>
+<div><label for="bh">الساعة</label><select id="bh"></select></div>
+<div><label for="bn">اسم الحاجز</label><input id="bn"></div>
+<div><label for="bp">سعر الساعة (ج)</label><input id="bp" type="number" inputmode="numeric" min="0"></div>
+</div>
+<button class="go" id="addb">تأكيد الحجز</button><div class="msg" id="bm"></div></div>
+<div class="box"><h2>الحجوزات القادمة</h2><div id="bl"></div></div>
+</section>
+
+<section id="p">
+<div class="box"><h2>آخر عمليات التحصيل</h2><div id="pl"></div></div>
+</section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const PLANS={'شهري':{d:30,p:150},'ربع سنوي':{d:90,p:400},'سنوي':{d:365,p:1200}};
+const FIELDS={'ملعب النجيل الصناعي':60,'الملعب الكبير بالبلد':null,'ملعب البحر':null};
+const iso=d=>d.toISOString().slice(0,10);
+const today=iso(new Date());
+const add=(s,n)=>{const d=new Date(s+'T12:00:00');d.setDate(d.getDate()+n);return iso(d)};
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36);
+let S={members:[],bookings:[],pays:[]},db=null;
+const saveLocal=()=>{try{localStorage.setItem('tg2',JSON.stringify(S))}catch(e){}};
+async function put(c,id,o){if(db){await db.collection(c).doc(id).set(o)}else{S[c]=S[c].filter(x=>x.id!==id);S[c].push({id,...o});saveLocal();render()}}
+async function del(c,id){if(db){await db.collection(c).doc(id).delete()}else{S[c]=S[c].filter(x=>x.id!==id);saveLocal();render()}}
+async function has(c,id){return db?(await db.collection(c).doc(id).get()).exists:S[c].some(x=>x.id===id)}
+const pay=(t,w,a)=>put('pays',uid(),{d:today,t,w,a,ts:Date.now()});
+function status(m){const l=Math.round((new Date(m.end)-new Date(today))/864e5);
+ return l<0?['منتهي','bad']:l<=7?['ينتهي خلال '+l+' يوم','warn']:['ساري','ok']}
+function render(){
+ const ms=[...S.members].sort((a,b)=>a.n.localeCompare(b.n,'ar'));
+ const act=ms.filter(m=>m.end>=today).length,soon=ms.filter(m=>m.end>=today&&m.end<=add(today,7)).length;
+ const tb=S.bookings.filter(b=>b.d===today).length,mon=S.pays.filter(p=>p.d.slice(0,7)===today.slice(0,7)).reduce((s,p)=>s+p.a,0);
+ $('#stats').innerHTML=[[act,'عضو ساري'],[soon,'اشتراك ينتهي خلال أسبوع'],[tb,'حجوزات اليوم'],[mon+' ج','إيراد الشهر']].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+ $('#ml').innerHTML=ms.length?ms.map(m=>{const[s,c]=status(m);
+  return `<div class="it"><div><b>${esc(m.n)}</b><small>${esc(m.ph)} • اشتراك ${esc(m.plan)} • حتى ${m.end}</small></div><div><span class="tag ${c}">${s}</span> <button class="sm" data-r="${m.id}">تجديد</button></div></div>`}).join(''):'<div class="empty">لا يوجد أعضاء. أضف أول عضو من النموذج بالأعلى.</div>';
+ const up=S.bookings.filter(b=>b.d>=today).sort((a,b)=>(a.d+String(a.h).padStart(2,'0')).localeCompare(b.d+String(b.h).padStart(2,'0')));
+ $('#bl').innerHTML=up.length?up.map(b=>`<div class="it"><div><b>${esc(b.f)}</b><small>${b.d} • ${b.h}:00 • ${esc(b.n)}</small></div><button class="sm" data-x="${b.id}">إلغاء</button></div>`).join(''):'<div class="empty">لا توجد حجوزات قادمة.</div>';
+ const ps=[...S.pays].sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,40);
+ $('#pl').innerHTML=ps.length?ps.map(p=>`<div class="it"><div><b>${esc(p.t)}</b><small>${esc(p.w)} • ${p.d}</small></div><b>${p.a} ج</b></div>`).join(''):'<div class="empty">لا توجد عمليات تحصيل بعد.</div>';
+}
+$('#mpl').innerHTML=Object.keys(PLANS).map(k=>`<option>${k}</option>`).join('');
+$('#bf').innerHTML=Object.keys(FIELDS).map(k=>`<option>${k}</option>`).join('');
+$('#bh').innerHTML=Array.from({length:16},(_,i)=>`<option value="${i+8}">${i+8}:00</option>`).join('');
+const setP=()=>{$('#bp').value=FIELDS[$('#bf').value]??''};$('#bf').onchange=setP;setP();
+$('#bd').value=today;$('#bd').min=today;
+$('#nav').onclick=e=>{const t=e.target.dataset.t;if(!t)return;
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===e.target));
+ document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t))};
+const say=(el,ok,t)=>{el.className='msg '+(ok?'ok':'bad');el.textContent=t};
+async function guard(el,fn){try{await fn()}catch(e){say(el,false,'تعذر الحفظ. تأكد أن لديك صلاحية التعديل ثم حاول مرة أخرى.')}}
+$('#addm').onclick=()=>{const n=$('#mn').value.trim(),ph=$('#mp').value.trim(),pl=$('#mpl').value,m=$('#mm');
+ if(!n||!ph){say(m,false,'اكتب الاسم ورقم الموبايل.');return}
+ guard(m,async()=>{await put('members',uid(),{n,ph,plan:pl,end:add(today,PLANS[pl].d)});await pay('اشتراك '+pl,n,PLANS[pl].p);
+  $('#mn').value=$('#mp').value='';say(m,true,'تم حفظ العضو وتحصيل '+PLANS[pl].p+' ج.')})};
+$('#ml').onclick=e=>{const id=e.target.dataset.r;if(!id)return;const m=S.members.find(x=>x.id===id);if(!m)return;
+ guard($('#mm'),async()=>{await put('members',id,{n:m.n,ph:m.ph,plan:m.plan,end:add(m.end>today?m.end:today,PLANS[m.plan].d)});await pay('تجديد '+m.plan,m.n,PLANS[m.plan].p)})};
+$('#addb').onclick=()=>{const f=$('#bf').value,fi=$('#bf').selectedIndex,d=$('#bd').value,h=+$('#bh').value,n=$('#bn').value.trim(),m=$('#bm'),pr=parseFloat($('#bp').value);
+ if(!n||!d){say(m,false,'اكتب اسم الحاجز واختر التاريخ.');return}
+ if(d<today){say(m,false,'لا يمكن الحجز في تاريخ سابق.');return}
+ if(isNaN(pr)||pr<=0){say(m,false,'اكتب سعر الساعة لهذا الملعب.');return}
+ guard(m,async()=>{const id=fi+'_'+d+'_'+h;
+  if(await has('bookings',id)){say(m,false,'هذا الموعد محجوز بالفعل. اختر ساعة أخرى.');return}
+  await put('bookings',id,{f,d,h,n});await pay('حجز '+f,n,pr);$('#bn').value='';say(m,true,'تم الحجز وتحصيل '+pr+' ج.')})};
+$('#bl').onclick=e=>{const id=e.target.dataset.x;if(id)guard($('#bm'),()=>del('bookings',id))};
+// الصق إعدادات Firebase هنا (من إعدادات المشروع > تطبيق ويب)
+const FB={apiKey:"AIzaSyAH1AZoO_ImRLvekZXkgMxZ7EPa4b2Ju4k",authDomain:"zero-1-f99f9.firebaseapp.com",projectId:"zero-1-f99f9",appId:"1:967842535565:web:0ce7c1846c3cc2b368eac4"};
+(function(){
+ if(FB.apiKey==="PASTE"){
+  try{const x=localStorage.getItem('tg2');if(x)S=JSON.parse(x)}catch(e){}
+  $('#sync').textContent='وضع تجريبي محلي: لم يتم ربط Firebase بعد، والبيانات على هذا الجهاز فقط.';render();return}
+ firebase.initializeApp(FB);const auth=firebase.auth(),fs=firebase.firestore();let un=[];
+ $('#lg').onclick=()=>auth.signInWithEmailAndPassword($('#le').value.trim(),$('#lp').value).catch(()=>say($('#lm'),false,'البريد أو كلمة المرور غير صحيحة.'));
+ $('#out').onclick=()=>auth.signOut();
+ auth.onAuthStateChanged(u=>{un.forEach(f=>f());un=[];
+  $('#login').style.display=u?'none':'block';$('#out').style.display=u?'':'none';
+  if(!u){db=null;S={members:[],bookings:[],pays:[]};render();return}
+  db=fs;['members','bookings','pays'].forEach(c=>un.push(fs.collection(c).onSnapshot(sn=>{S[c]=sn.docs.map(d=>({id:d.id,...d.data()}));render()},()=>say($('#lm'),false,'لا توجد صلاحية للوصول إلى البيانات.'))));
+  $('#sync').textContent='متصل: '+u.email;render()});
+})();
+</script>
+</body>
+</html>
