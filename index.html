@@ -36,118 +36,139 @@ input,select{width:100%;font:inherit;padding:8px;border:1px solid var(--line);bo
 .ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:#B07A00}
 .msg{min-height:22px;font-size:13px;font-weight:600;margin-top:6px}
 .empty{color:var(--mute);font-size:14px;padding:8px 0}
+header{display:flex;align-items:center;gap:12px}.lg{width:56px;height:56px;border-radius:50%;background:#fff;object-fit:cover;flex:none}.hd{flex:1}
+.av{width:42px;height:42px;border-radius:50%;object-fit:cover;background:var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:800;flex:none}
+.ci{display:flex;gap:10px;align-items:center}.acts{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}#q{margin-bottom:8px}#rc{display:none}
+@media print{body>*:not(#rc){display:none!important}#rc{display:block!important;padding:24px;color:#000;background:#fff;font-size:16px}#rc img{width:80px}}
 </style>
 </head>
 <body>
-<header style="display:flex;justify-content:space-between;align-items:center"><div><h1>مركز شباب طنط الجزيرة</h1><p>المرحلة الأولى</p></div><button class="sm" id="out" style="display:none;color:#fff;border-color:#fff">خروج</button></header>
+<header><img class="lg" alt="شعار"><div class="hd"><h1>مركز شباب طنط الجزيرة</h1><p>محافظة القليوبية — إدارة شباب طوخ</p></div><button class="sm" id="out" style="display:none;color:#fff;border-color:#fff">خروج</button></header>
 <div id="login" style="display:none;position:fixed;inset:0;z-index:9;background:var(--bg);padding:24px;padding-top:calc(24px + env(safe-area-inset-top,0px))"><div class="box" style="max-width:360px;margin:8vh auto"><h2>تسجيل دخول الموظفين</h2><label for="le">البريد الإلكتروني</label><input id="le" type="email" autocomplete="username"><label for="lp" style="margin-top:8px">كلمة المرور</label><input id="lp" type="password" autocomplete="current-password"><button class="go" id="lg">دخول</button><div class="msg" id="lm"></div></div></div>
 <div id="sync" class="empty" style="padding:6px 16px;font-size:12px;text-align:center"></div>
 <main>
 <div class="stats" id="stats"></div>
-<nav id="nav">
-<button data-t="m" class="on">الأعضاء والاشتراكات</button>
-<button data-t="b">حجز الملاعب</button>
-<button data-t="p">التحصيل</button>
-</nav>
-
+<nav id="nav"><button data-t="m" class="on">الأعضاء</button><button data-t="b">الحجوزات</button><button data-t="p">التحصيل</button></nav>
 <section id="m" class="on">
-<div class="box"><h2>إضافة عضو</h2>
-<div class="row">
+<div class="box"><h2 id="mt">إضافة عضو</h2><div class="row">
 <div><label for="mn">الاسم</label><input id="mn"></div>
-<div><label for="mp">الموبايل</label><input id="mp" inputmode="tel"></div>
-<div><label for="mpl">الاشتراك</label><select id="mpl"></select></div>
-</div>
-<button class="go" id="addm">حفظ وتحصيل الاشتراك</button><div class="msg" id="mm"></div></div>
-<div class="box"><h2>الأعضاء</h2><div id="ml"></div></div>
+<div><label for="mp">التليفون</label><input id="mp" inputmode="tel"></div>
+<div><label for="mi">الرقم القومي</label><input id="mi" inputmode="numeric" maxlength="14"></div>
+<div><label for="mb">تاريخ الميلاد</label><input id="mb" type="date"></div>
+<div><label for="mpl">الأكاديمية</label><select id="mpl"></select></div>
+<div><label for="mf">الصورة</label><input id="mf" type="file" accept="image/*"></div>
+</div><button class="go" id="addm">حفظ وتحصيل الاشتراك</button> <button class="sm" id="cm" style="display:none">إلغاء التعديل</button><div class="msg" id="mm"></div></div>
+<div class="box"><h2>الأعضاء</h2><input id="q" placeholder="بحث: اسم / تليفون / رقم قومي / رقم العضو"><div id="ml"></div></div>
 </section>
-
 <section id="b">
-<div class="box"><h2>حجز جديد</h2>
-<div class="row">
-<div><label for="bf">الملعب</label><select id="bf"></select></div>
+<div class="box"><h2>حجز جديد</h2><div class="row">
+<div><label for="bt">النوع</label><select id="bt"></select></div>
+<div id="bfw"><label for="bf">الملعب</label><select id="bf"></select></div>
 <div><label for="bd">التاريخ</label><input type="date" id="bd"></div>
-<div><label for="bh">الساعة</label><select id="bh"></select></div>
-<div><label for="bn">اسم الحاجز</label><input id="bn"></div>
-<div><label for="bp">سعر الساعة (ج)</label><input id="bp" type="number" inputmode="numeric" min="0"></div>
-</div>
-<button class="go" id="addb">تأكيد الحجز</button><div class="msg" id="bm"></div></div>
+<div id="bhw"><label for="bh">من الساعة</label><select id="bh"></select></div>
+<div id="bdw"><label for="bu">المدة (ساعات)</label><input id="bu" type="number" min="1" value="1"></div>
+<div id="bew"><label><input type="checkbox" id="be" style="width:auto"> أدوات (+5 ج)</label></div>
+<div><label for="bn">الاسم</label><input id="bn"></div>
+<div><label for="bp">السعر (ج)</label><input id="bp" type="number" min="0"></div>
+</div><button class="go" id="addb">تأكيد الحجز</button><div class="msg" id="bm"></div></div>
 <div class="box"><h2>الحجوزات القادمة</h2><div id="bl"></div></div>
 </section>
-
-<section id="p">
-<div class="box"><h2>آخر عمليات التحصيل</h2><div id="pl"></div></div>
-</section>
+<section id="p"><div class="box"><h2>آخر عمليات التحصيل</h2><div id="pl"></div></div></section>
 </main>
-
+<div id="rc"></div>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
+const LOGO="data:image/jpeg;base64,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";document.querySelector('.lg').src=LOGO;
 const $=s=>document.querySelector(s);
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const PLANS={'شهري':{d:30,p:150},'ربع سنوي':{d:90,p:400},'سنوي':{d:365,p:1200}};
-const FIELDS={'ملعب النجيل الصناعي':60,'الملعب الكبير بالبلد':null,'ملعب البحر':null};
-const iso=d=>d.toISOString().slice(0,10);
+const PL={'أكاديمية كرة القدم':100,'أكاديمية الجمباز':100,'أكاديمية الشطرنج':100};
+const FLD=['الملعب الكبير بالبلد','ملعب النجيل الصناعي','ملعب البحر'];
+const TY={f:{n:'ملعب بالساعة',u:60},n:{n:'خدمة ليلية (الملعب الكبير)',u:800},t:{n:'تنس طاولة',u:5},b:{n:'بلياردو',u:10}};
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const today=iso(new Date());
 const add=(s,n)=>{const d=new Date(s+'T12:00:00');d.setDate(d.getDate()+n);return iso(d)};
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36);
-let S={members:[],bookings:[],pays:[]},db=null;
+let S={members:[],bookings:[],pays:[]},db=null,ME='محلي',edit=null;
 const saveLocal=()=>{try{localStorage.setItem('tg2',JSON.stringify(S))}catch(e){}};
 async function put(c,id,o){if(db){await db.collection(c).doc(id).set(o)}else{S[c]=S[c].filter(x=>x.id!==id);S[c].push({id,...o});saveLocal();render()}}
 async function del(c,id){if(db){await db.collection(c).doc(id).delete()}else{S[c]=S[c].filter(x=>x.id!==id);saveLocal();render()}}
-async function has(c,id){return db?(await db.collection(c).doc(id).get()).exists:S[c].some(x=>x.id===id)}
-const pay=(t,w,a)=>put('pays',uid(),{d:today,t,w,a,ts:Date.now()});
-function status(m){const l=Math.round((new Date(m.end)-new Date(today))/864e5);
- return l<0?['منتهي','bad']:l<=7?['ينتهي خلال '+l+' يوم','warn']:['ساري','ok']}
+const nx=c=>Math.max(0,...S[c].map(x=>x.no||0))+1;
+const pay=(t,w,a)=>put('pays',uid(),{no:nx('pays'),d:today,t,w,a,ts:Date.now(),by:ME});
+const say=(el,ok,t)=>{el.className='msg '+(ok?'ok':'bad');el.textContent=t};
+async function guard(el,fn){try{await fn()}catch(e){say(el,false,'تعذر الحفظ. تأكد من الصلاحية وحاول مرة أخرى.')}}
+const shrink=f=>new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=c.height=120;const x=c.getContext('2d'),s=Math.min(i.width,i.height);x.drawImage(i,(i.width-s)/2,(i.height-s)/2,s,s,0,0,120,120);r(c.toDataURL('image/jpeg',.7))};i.src=fr.result};fr.readAsDataURL(f)});
+function status(m){const l=Math.round((new Date(m.end)-new Date(today))/864e5);return l<0?['منتهي','bad']:l<=7?['ينتهي خلال '+l+' يوم','warn']:['ساري','ok']}
+const hh=n=>String(n).padStart(2,'0');
+function bl(b){return b.t==='f'?`${b.f} • ${b.h}:00 إلى ${b.h+b.u}:00`:b.t==='n'?`${b.f} • ليلية كاملة`:`${TY[b.t].n} • ${b.u} ساعة${b.eq?' + أدوات':''}`}
 function render(){
- const ms=[...S.members].sort((a,b)=>a.n.localeCompare(b.n,'ar'));
- const act=ms.filter(m=>m.end>=today).length,soon=ms.filter(m=>m.end>=today&&m.end<=add(today,7)).length;
+ const all=S.members,act=all.filter(m=>m.end>=today).length,soon=all.filter(m=>m.end>=today&&m.end<=add(today,7)).length;
  const tb=S.bookings.filter(b=>b.d===today).length,mon=S.pays.filter(p=>p.d.slice(0,7)===today.slice(0,7)).reduce((s,p)=>s+p.a,0);
- $('#stats').innerHTML=[[act,'عضو ساري'],[soon,'اشتراك ينتهي خلال أسبوع'],[tb,'حجوزات اليوم'],[mon+' ج','إيراد الشهر']].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
- $('#ml').innerHTML=ms.length?ms.map(m=>{const[s,c]=status(m);
-  return `<div class="it"><div><b>${esc(m.n)}</b><small>${esc(m.ph)} • اشتراك ${esc(m.plan)} • حتى ${m.end}</small></div><div><span class="tag ${c}">${s}</span> <button class="sm" data-r="${m.id}">تجديد</button></div></div>`}).join(''):'<div class="empty">لا يوجد أعضاء. أضف أول عضو من النموذج بالأعلى.</div>';
- const up=S.bookings.filter(b=>b.d>=today).sort((a,b)=>(a.d+String(a.h).padStart(2,'0')).localeCompare(b.d+String(b.h).padStart(2,'0')));
- $('#bl').innerHTML=up.length?up.map(b=>`<div class="it"><div><b>${esc(b.f)}</b><small>${b.d} • ${b.h}:00 • ${esc(b.n)}</small></div><button class="sm" data-x="${b.id}">إلغاء</button></div>`).join(''):'<div class="empty">لا توجد حجوزات قادمة.</div>';
+ $('#stats').innerHTML=[[act,'مشترك ساري'],[soon,'اشتراك ينتهي خلال أسبوع'],[tb,'حجوزات اليوم'],[mon+' ج','إيراد الشهر']].map(x=>`<div class="st"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+ const q=$('#q').value.trim();let ms=[...all].sort((a,b)=>a.n.localeCompare(b.n,'ar'));
+ if(q)ms=ms.filter(m=>(m.n+' '+(m.ph||'')+' '+(m.nid||'')).includes(q)||String(m.no)===q.replace('#',''));
+ $('#ml').innerHTML=ms.length?ms.map(m=>{const[s,c]=status(m);const av=m.photo?`<img class="av" src="${m.photo}" alt="">`:`<span class="av">${esc(m.n[0]||'؟')}</span>`;
+  return `<div class="it"><div class="ci">${av}<div><b>${esc(m.n)}</b> <small style="display:inline">#${m.no||''}</small><small>${esc(m.ph||'')} • ${esc(m.plan)} • حتى ${m.end}</small></div></div><div class="acts"><span class="tag ${c}">${s}</span><button class="sm" data-r="${m.id}">تجديد</button><button class="sm" data-e="${m.id}">تعديل</button><button class="sm" data-d="${m.id}">حذف</button></div></div>`}).join(''):'<div class="empty">لا يوجد أعضاء مطابقين.</div>';
+ const up=S.bookings.filter(b=>b.d>=today).sort((a,b)=>(a.d+hh(a.h)).localeCompare(b.d+hh(b.h)));
+ $('#bl').innerHTML=up.length?up.map(b=>`<div class="it"><div><b>${esc(b.n)}</b><small>${b.d} • ${bl(b)}</small></div><button class="sm" data-x="${b.id}">إلغاء</button></div>`).join(''):'<div class="empty">لا توجد حجوزات قادمة.</div>';
  const ps=[...S.pays].sort((a,b)=>(b.ts||0)-(a.ts||0)).slice(0,40);
- $('#pl').innerHTML=ps.length?ps.map(p=>`<div class="it"><div><b>${esc(p.t)}</b><small>${esc(p.w)} • ${p.d}</small></div><b>${p.a} ج</b></div>`).join(''):'<div class="empty">لا توجد عمليات تحصيل بعد.</div>';
+ $('#pl').innerHTML=ps.length?ps.map(p=>`<div class="it"><div><b>${esc(p.t)}</b><small>#${p.no||''} • ${esc(p.w)} • ${p.d}</small></div><div class="acts"><b>${p.a} ج</b><button class="sm" data-rc="${p.id}">إيصال</button></div></div>`).join(''):'<div class="empty">لا توجد عمليات تحصيل بعد.</div>';
 }
-$('#mpl').innerHTML=Object.keys(PLANS).map(k=>`<option>${k}</option>`).join('');
-$('#bf').innerHTML=Object.keys(FIELDS).map(k=>`<option>${k}</option>`).join('');
+function receipt(id){const p=S.pays.find(x=>x.id===id);if(!p)return;
+ $('#rc').innerHTML=`<div style="text-align:center"><img src="${LOGO}" alt=""><h2>مركز شباب طنط الجزيرة</h2><p>إيصال استلام نقدية رقم ${p.no||''}</p></div><hr><p>التاريخ: ${p.d}</p><p>استلمنا من: ${esc(p.w)}</p><p>البند: ${esc(p.t)}</p><p><b>المبلغ: ${p.a} جنيه</b></p><p>المحصّل: ${esc(p.by||'')}</p><br><p>التوقيع: ____________</p>`;window.print()}
+function resetM(){edit=null;['#mn','#mp','#mi','#mb','#mf'].forEach(i=>$(i).value='');$('#mt').textContent='إضافة عضو';$('#addm').textContent='حفظ وتحصيل الاشتراك';$('#cm').style.display='none'}
+$('#mpl').innerHTML=Object.keys(PL).map(k=>`<option>${k}</option>`).join('');
+$('#bt').innerHTML=Object.entries(TY).map(([k,v])=>`<option value="${k}">${v.n}</option>`).join('');
+$('#bf').innerHTML=FLD.map(x=>`<option>${x}</option>`).join('');
 $('#bh').innerHTML=Array.from({length:16},(_,i)=>`<option value="${i+8}">${i+8}:00</option>`).join('');
-const setP=()=>{$('#bp').value=FIELDS[$('#bf').value]??''};$('#bf').onchange=setP;setP();
 $('#bd').value=today;$('#bd').min=today;
+function calc(){const t=$('#bt').value;$('#bfw').hidden=$('#bhw').hidden=t!=='f';$('#bdw').hidden=t==='n';$('#bew').hidden=t!=='t';
+ $('#bp').value=TY[t].u*(t==='n'?1:(parseInt($('#bu').value)||1))+(t==='t'&&$('#be').checked?5:0)}
+['#bt','#bu','#be'].forEach(i=>$(i).onchange=calc);$('#bu').oninput=calc;calc();
+$('#q').oninput=render;
 $('#nav').onclick=e=>{const t=e.target.dataset.t;if(!t)return;
  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b===e.target));
  document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t))};
-const say=(el,ok,t)=>{el.className='msg '+(ok?'ok':'bad');el.textContent=t};
-async function guard(el,fn){try{await fn()}catch(e){say(el,false,'تعذر الحفظ. تأكد أن لديك صلاحية التعديل ثم حاول مرة أخرى.')}}
-$('#addm').onclick=()=>{const n=$('#mn').value.trim(),ph=$('#mp').value.trim(),pl=$('#mpl').value,m=$('#mm');
- if(!n||!ph){say(m,false,'اكتب الاسم ورقم الموبايل.');return}
- guard(m,async()=>{await put('members',uid(),{n,ph,plan:pl,end:add(today,PLANS[pl].d)});await pay('اشتراك '+pl,n,PLANS[pl].p);
-  $('#mn').value=$('#mp').value='';say(m,true,'تم حفظ العضو وتحصيل '+PLANS[pl].p+' ج.')})};
-$('#ml').onclick=e=>{const id=e.target.dataset.r;if(!id)return;const m=S.members.find(x=>x.id===id);if(!m)return;
- guard($('#mm'),async()=>{await put('members',id,{n:m.n,ph:m.ph,plan:m.plan,end:add(m.end>today?m.end:today,PLANS[m.plan].d)});await pay('تجديد '+m.plan,m.n,PLANS[m.plan].p)})};
-$('#addb').onclick=()=>{const f=$('#bf').value,fi=$('#bf').selectedIndex,d=$('#bd').value,h=+$('#bh').value,n=$('#bn').value.trim(),m=$('#bm'),pr=parseFloat($('#bp').value);
- if(!n||!d){say(m,false,'اكتب اسم الحاجز واختر التاريخ.');return}
+$('#cm').onclick=resetM;
+$('#addm').onclick=()=>{const m=$('#mm'),n=$('#mn').value.trim(),ph=$('#mp').value.trim(),nid=$('#mi').value.trim(),bd=$('#mb').value,pl=$('#mpl').value,f=$('#mf').files[0];
+ if(!n||!ph){say(m,false,'اكتب الاسم ورقم التليفون.');return}
+ if(!/^\d{8,12}$/.test(ph)){say(m,false,'رقم التليفون غير صحيح.');return}
+ if(nid&&!/^\d{14}$/.test(nid)){say(m,false,'الرقم القومي لازم يكون ١٤ رقم.');return}
+ if(nid&&S.members.some(x=>x.nid===nid&&x.id!==edit)){say(m,false,'الرقم القومي مسجّل لعضو آخر.');return}
+ guard(m,async()=>{const old=edit&&S.members.find(x=>x.id===edit);const photo=f?await shrink(f):(old?old.photo||'':'');
+  if(old){await put('members',edit,{no:old.no,n,ph,nid,bd,plan:pl,end:old.end,photo});say(m,true,'تم حفظ التعديل.')}
+  else{await put('members',uid(),{no:nx('members'),n,ph,nid,bd,plan:pl,end:add(today,30),photo});await pay('اشتراك '+pl,n,PL[pl]);say(m,true,'تم حفظ العضو وتحصيل '+PL[pl]+' ج.')}
+  const k=$('#mm').textContent,c=$('#mm').className;resetM();$('#mm').textContent=k;$('#mm').className=c})};
+$('#ml').onclick=e=>{const d=e.target.dataset,m=S.members.find(x=>x.id===(d.r||d.e||d.d));if(!m)return;
+ if(d.r){const pr=PL[m.plan]||100;guard($('#mm'),async()=>{await put('members',m.id,{no:m.no,n:m.n,ph:m.ph,nid:m.nid||'',bd:m.bd||'',plan:m.plan,end:add(m.end>today?m.end:today,30),photo:m.photo||''});await pay('تجديد '+m.plan,m.n,pr)})}
+ else if(d.e){edit=m.id;$('#mn').value=m.n;$('#mp').value=m.ph||'';$('#mi').value=m.nid||'';$('#mb').value=m.bd||'';if(PL[m.plan])$('#mpl').value=m.plan;$('#mt').textContent='تعديل عضو (اترك الصورة فاضية للإبقاء عليها)';$('#addm').textContent='حفظ التعديل';$('#cm').style.display='';$('#mt').scrollIntoView()}
+ else if(d.d&&confirm('حذف العضو '+m.n+'؟')){guard($('#mm'),()=>del('members',m.id))}};
+$('#addb').onclick=()=>{const t=$('#bt').value,d=$('#bd').value,n=$('#bn').value.trim(),m=$('#bm'),a=parseFloat($('#bp').value);
+ let f='',h=0,u=t==='n'?24:Math.max(1,parseInt($('#bu').value)||1);
+ if(t==='f'){f=$('#bf').value;h=+$('#bh').value;if(h+u>24){say(m,false,'المدة تتجاوز منتصف الليل.');return}}
+ if(t==='n')f=FLD[0];
+ if(!n||!d){say(m,false,'اكتب الاسم واختر التاريخ.');return}
  if(d<today){say(m,false,'لا يمكن الحجز في تاريخ سابق.');return}
- if(isNaN(pr)||pr<=0){say(m,false,'اكتب سعر الساعة لهذا الملعب.');return}
- guard(m,async()=>{const id=fi+'_'+d+'_'+h;
-  if(await has('bookings',id)){say(m,false,'هذا الموعد محجوز بالفعل. اختر ساعة أخرى.');return}
-  await put('bookings',id,{f,d,h,n});await pay('حجز '+f,n,pr);$('#bn').value='';say(m,true,'تم الحجز وتحصيل '+pr+' ج.')})};
+ if(isNaN(a)||a<=0){say(m,false,'اكتب السعر.');return}
+ if(f&&S.bookings.some(b=>b.f===f&&b.d===d&&h<b.h+b.u&&b.h<h+u)){say(m,false,'الملعب محجوز في هذا الوقت.');return}
+ const eq=t==='t'&&$('#be').checked;
+ guard(m,async()=>{await put('bookings',uid(),{t,f,d,h,u,n,eq,a});await pay(TY[t].n+(f?' - '+f:''),n,a);$('#bn').value='';say(m,true,'تم الحجز وتحصيل '+a+' ج.')})};
 $('#bl').onclick=e=>{const id=e.target.dataset.x;if(id)guard($('#bm'),()=>del('bookings',id))};
+$('#pl').onclick=e=>{const id=e.target.dataset.rc;if(id)receipt(id)};
 // الصق إعدادات Firebase هنا (من إعدادات المشروع > تطبيق ويب)
 const FB={apiKey:"AIzaSyAH1AZoO_ImRLvekZXkgMxZ7EPa4b2Ju4k",authDomain:"zero-1-f99f9.firebaseapp.com",projectId:"zero-1-f99f9",appId:"1:967842535565:web:0ce7c1846c3cc2b368eac4"};
 (function(){
  if(FB.apiKey==="PASTE"){
   try{const x=localStorage.getItem('tg2');if(x)S=JSON.parse(x)}catch(e){}
-  $('#sync').textContent='وضع تجريبي محلي: لم يتم ربط Firebase بعد، والبيانات على هذا الجهاز فقط.';render();return}
+  $('#sync').textContent='وضع تجريبي محلي: لم يتم ربط Firebase بعد.';render();return}
  firebase.initializeApp(FB);const auth=firebase.auth(),fs=firebase.firestore();let un=[];
  $('#lg').onclick=()=>auth.signInWithEmailAndPassword($('#le').value.trim(),$('#lp').value).catch(()=>say($('#lm'),false,'البريد أو كلمة المرور غير صحيحة.'));
  $('#out').onclick=()=>auth.signOut();
  auth.onAuthStateChanged(u=>{un.forEach(f=>f());un=[];
   $('#login').style.display=u?'none':'block';$('#out').style.display=u?'':'none';
   if(!u){db=null;S={members:[],bookings:[],pays:[]};render();return}
-  db=fs;['members','bookings','pays'].forEach(c=>un.push(fs.collection(c).onSnapshot(sn=>{S[c]=sn.docs.map(d=>({id:d.id,...d.data()}));render()},()=>say($('#lm'),false,'لا توجد صلاحية للوصول إلى البيانات.'))));
+  ME=u.email;db=fs;['members','bookings','pays'].forEach(c=>un.push(fs.collection(c).onSnapshot(sn=>{S[c]=sn.docs.map(d=>({id:d.id,...d.data()}));render()},()=>say($('#lm'),false,'لا توجد صلاحية للوصول إلى البيانات.'))));
   $('#sync').textContent='متصل: '+u.email;render()});
 })();
 </script>
